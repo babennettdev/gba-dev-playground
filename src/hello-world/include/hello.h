@@ -9,19 +9,19 @@
 
 typedef struct Hello
 {
-  const char *string; //!< String for Hello World
-  COLOR *color        //!< Color of the string
+  const char *string; // String for Hello World
+  COLOR *color        // Color of the string
 } Hello;
 
 // --------------------------------------------------------------------
 // PROTOTYPES
 // --------------------------------------------------------------------
 
-void hello_create(Hello *hellowWorld, char *helloString, COLOR *color);
+void hello_create(Hello *helloWorld, char *helloString, COLOR *color);
 
-void hello_init(Hello *hellowWorld);
-void hello_run(Hello *hellowWorld);
-void hello_draw(Hello *hellowWorld);
+void hello_init(Hello *helloWorld);
+void hello_run(Hello *helloWorld);
+void hello_draw(Hello *helloWorld);
 
 #endif // __HELLO_H__
 
