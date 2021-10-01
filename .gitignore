@@ -1,3 +1,6 @@
+# Untracked subdirectories
+/libs/*
+
 # Prerequisites
 *.d
 
