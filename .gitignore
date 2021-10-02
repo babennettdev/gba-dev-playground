@@ -1,5 +1,7 @@
 # Untracked subdirectories
 /libs/*
+/**/build/*
+*.gba
 
 # Prerequisites
 *.d
