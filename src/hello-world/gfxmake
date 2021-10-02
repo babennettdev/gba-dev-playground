@@ -10,11 +10,12 @@
 
 export PATH	:=	$(DEVKITARM)/bin:$(PATH)
 
+GRIT		:= grit
+
 .SUFFIXES:
 
-include $(DEVKITARM)/base_rules
+include $(DEVKITARM)/gba_rules
 
-GRIT		:= grit
 
 # ---------------------------------------------------------------------
 # PROJECT DETAILS
@@ -40,17 +41,16 @@ GFXEXTS		:= png bmp
 # GFXSPECIALS	: removed from GFXFILES
 # OSPECIALS		: added to OFILES
 
-
 # Key exception variables
 export GFXSPECIALS	:=
-OSPECIALS			:=
+OSPECIALS			:= 
 
 
 # ---------------------------------------------------------------------
 # BUILD FLAGS
 # ---------------------------------------------------------------------
 
-# Since there's not *code* to compile, we won't need optimizations, 
+# Since there's no code to compile, we won't need optimizations, 
 # architectures etc.
 
 CFLAGS		:= 
@@ -94,11 +94,14 @@ all	: $(BUILD)
 
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) $(TARGET)
+	@rm -fr $(BUILD) $(TARGET) $(GFXHDR)
 
+	
 # ---------------------------------------------------------------------
 
 else
+
+FOO		= build/foo.bar.x
 
 DEPENDS	:=	$(OFILES:.o=.d)
 
@@ -124,7 +127,7 @@ $(GFXHDR) : $(OFILES)
 # --- With separate .grit file ---
 
 %.s %.h	: %.png %.grit
-	$(GRIT) $< -o$* -fts
+	@$(GRIT) $< -o$* -fts
 
 %.s %.h	: %.bmp %.grit
 	@$(GRIT) $< -o$* -fts
@@ -136,8 +139,7 @@ $(GFXHDR) : $(OFILES)
 	@$(GRIT) $< -o$* -fts
 
 
-# --- Base gfx rules (without .grit) ---
-# $(<D)/$(notdir $(<D)).grit evaluates to dirname/dirname.grit
+# --- Without .grit file ; uses dirname/dirname.grit for options ---
 
 %.s %.h	: %.png
 	$(GRIT) $< -o$* -fts -ff $(<D)/$(notdir $(<D)).grit
@@ -157,20 +159,17 @@ $(GFXHDR) : $(OFILES)
 # ---------------------------------------------------------------------
 
 
-
 # ---------------------------------------------------------------------
 # FUNCTIONS
 # ---------------------------------------------------------------------
 
 ## Merge all headers into a single large one for easier including.
-## $1 : master path
-## $2 : separate header paths
-define master-header
+define master-header	# $1 : master path, $2 separate header paths
 	echo -e "//\n// $(notdir $(strip $1))\n//" > $1
 	echo -e "// One header to rule them and in the darkness bind them" >> $1
 	echo -e "// Date: $(shell date +'%F %X' )\n" >> $1
 	echo -e "#ifdef __cplusplus\nextern \"C\" {\n#endif" >> $1
-	if [ $2 ]; then cat $2 >> $1 ; fi
+	cat $2 >> $1
 	echo -e "\n#ifdef __cplusplus\n};\n#endif\n" >> $1
 endef
 
@@ -181,25 +180,20 @@ endef
 # --- odds and ends ---
 
 ## Get the title-part of filename.
-## $1: filepath
-define title
+define title		# $1: filepath
 	$(basename $(notdir $1))
 endef
 
 ## Get a valid C identifier for a name.
-## $1: name
-define cident
+define cident		# $1: name
 	`echo $1 | sed -e 's|^\([0-9]\)|_\1| ; s|[./\\-]|_|g'`
 endef
 
 ## Create a header file for a bin2s converted binary.
-## $1: path
-## $2: identifier
-define bin-header
+define bin-header		# $1: path, $2: identifier
 	echo "extern const u32 $(strip $2)_size;" >  $1
 	echo "extern const u8 $(strip $2)[];"     >> $1	
 endef
-
 
 # ---------------------------------------------------------------------
 # DEPENDENCIES
