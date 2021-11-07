@@ -30,7 +30,7 @@ typedef struct Tower
 
 void tower_create();
 
-void tower_init(OBJ_ATTR *towerBase, OBJ_ATTR *towerTurret, int tower_starting_pos_x, int tower_starting_pos_y);
+void tower_init(OBJ_ATTR *towerBase, OBJ_ATTR *towerTurret, OBJ_AFFINE *obj_aff_buffer, int tower_starting_pos_x, int tower_starting_pos_y);
 void tower_run();
 void tower_draw();
 
