@@ -7,13 +7,17 @@
 // CONSTANTS
 // --------------------------------------------------------------------
 
+#define ROBOT_OBJ_BUFFER_POS 2
+#define ROBOT_TID ROBOT_OBJ_BUFFER_POS * 8
+
 // --------------------------------------------------------------------
 // TYPES
 // --------------------------------------------------------------------
 
 typedef struct Robot
 {
-  int position[2];
+  int position_x;
+  int position_y;
 } Robot;
 
 // --------------------------------------------------------------------
@@ -22,7 +26,7 @@ typedef struct Robot
 
 void robot_create();
 
-void robot_init();
+void robot_init(OBJ_ATTR *robot, int robot_starting_pos_x, int robot_starting_pos_y);
 void robot_run();
 void robot_draw();
 
