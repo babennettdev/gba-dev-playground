@@ -1,4 +1,8 @@
+#include "basicConstants.h"
 #include "first_draft_sprites.h"
+#include "robot.h"
+#include "tower.h"
+
 #include <string.h>
 #include <tonc.h>
 
@@ -7,44 +11,34 @@ OBJ_AFFINE *obj_aff_buffer = (OBJ_AFFINE *)obj_buffer;
 
 void obj_test()
 {
-  int x = 96, y = 32;
-  u32 tid = 0; // tile id
+  int turret_pos_x = CENTER_TILE_X, turret_pos_y = CENTER_TILE_Y;
+  int robot_pos_x = 0, robot_pos_y = 0;
 
-  OBJ_ATTR *turretBase = &obj_buffer[0];
-  obj_set_attr(turretBase,
-               ATTR0_8BPP | ATTR0_SQUARE, // Square, 8bpp sprite
-               ATTR1_SIZE_16,             // 16x16,
-               tid | ATTR2_PRIO(3));      // tile 0
+  OBJ_ATTR *towerBase = &obj_buffer[0];
+  OBJ_ATTR *towerTurret = &obj_buffer[1];
+  tower_init(towerBase, towerTurret, robot_pos_x, robot_pos_x);
 
-  obj_set_pos(turretBase, x, y);
-
-  OBJ_ATTR *turretGun = &obj_buffer[1];
-  obj_set_attr(turretGun,
-               ATTR0_8BPP | ATTR0_SQUARE,  // Square, 8bpp sprite
-               ATTR1_SIZE_16,              // 16x16,
-               (tid + 8) | ATTR2_PRIO(1)); // tile 1
-  obj_set_pos(turretGun, x, y);
-
-  OBJ_ATTR *robot = &obj_buffer[2];
-  obj_set_attr(robot,
-               ATTR0_8BPP | ATTR0_SQUARE,   // Square, 8bpp sprite
-               ATTR1_SIZE_16,               // 16x16,
-               (tid + 16) | ATTR2_PRIO(2)); // tile 2
-
-  obj_set_pos(robot, x + 32, y + 32);
-
+  OBJ_ATTR *robot = &obj_buffer[ROBOT_OBJ_BUFFER_POS];
+  robot_init(robot, robot_pos_x, robot_pos_x);
+  oam_copy(oam_mem, obj_buffer, 4);
   while (1)
   {
     vid_vsync();
     key_poll();
 
-    turretBase->attr2 = ATTR2_BUILD(tid, 0, 3);
-    turretGun->attr2 = ATTR2_BUILD(tid + 8, 0, 1);
-    robot->attr2 = ATTR2_BUILD(tid + 16, 0, 2);
+    towerBase->attr2 = ATTR2_BUILD(TOWER_BASE_TID, 0, 3);
+    towerTurret->attr2 = ATTR2_BUILD(TOWER_TURRET_TID, 0, 1);
+    robot->attr2 = ATTR2_BUILD(ROBOT_TID, 0, 2);
 
-    obj_set_pos(turretBase, x, y);
-    obj_set_pos(turretGun, x, y);
-    obj_set_pos(robot, x + 32, y + 32);
+    obj_set_pos(towerBase, turret_pos_x, turret_pos_y);
+    obj_set_pos(towerTurret, turret_pos_x, turret_pos_y);
+    obj_set_pos(robot, robot_pos_x, robot_pos_y);
+
+    // move left/right
+    robot_pos_x += 2 * key_tri_horz();
+
+    // move up/down
+    robot_pos_y += 2 * key_tri_vert();
     oam_copy(oam_mem, obj_buffer, 4);
   }
 }
