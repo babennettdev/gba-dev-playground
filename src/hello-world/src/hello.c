@@ -2,7 +2,7 @@
 
 #include <tonc.h>
 #include "hello.h"
-#include "sprite_test.h"
+#include "bitmap_test.h"
 
 const RECT cMenuMainRect = {16, 16, 224, 128};
 
@@ -33,7 +33,7 @@ void hello_init(Hello *helloWorld)
   tte_set_ink(HELLO_PAL_TEXT_BASE);
 
   // Init palette
-  GRIT_CPY(pal_bg_mem, sprite_testPal);
+  GRIT_CPY(pal_bg_mem, bitmap_testPal);
   pal_bg_mem[0] = CLR_BLACK;
 
   REG_DISPCNT = DCNT_MODE4 | DCNT_BG2;
@@ -56,7 +56,7 @@ void hello_draw(const Hello *helloWorld)
 
   const char *helloWorldString = &helloWorld->string[0];
 
-  RLUnCompVram(sprite_testBitmap, vid_page);
+  RLUnCompVram(bitmap_testBitmap, vid_page);
 
   // Plot item strings
   tte_printf("#{P:%d,%d;ci:%d}%s",
