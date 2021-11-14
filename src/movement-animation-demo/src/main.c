@@ -41,18 +41,18 @@ void protagonist_animation()
     protagonist_move(protagonist);
 
     // move left/right
-    protagonist->position_x += 2 * key_tri_horz();
-    protag.position_x += 2 * key_tri_horz();
+    protagonist->velocity_x = key_tri_horz();
 
     // move up/down
-    protagonist->position_y += 2 * key_tri_vert();
-    protag.position_y += 2 * key_tri_vert();
+    protagonist->velocity_y = key_tri_vert();
 
     oam_copy(oam_mem, obj_buffer, 128);
 
-    tte_printf("#{es;P}%d, %d ",
-               protag.position_x,
-               protag.position_y);
+    tte_printf("#{es;P}position_x: %d, position_y: %d, velocity_x: %d, velocity_y: %d ",
+               protagonist->position_x,
+               protagonist->position_y,
+               protagonist->velocity_x,
+               protagonist->velocity_y);
   }
 }
 
