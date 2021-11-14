@@ -28,8 +28,8 @@ typedef struct Protagonist
 {
   int position_x;
   int position_y;
-  int facing_x;
-  int facing_y;
+  int velocity_x;
+  int velocity_y;
   OBJ_ATTR *protagonistSpriteCurrent;
 
 } Protagonist;
