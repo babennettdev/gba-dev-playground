@@ -25,6 +25,9 @@ void protagonist_animation()
           protagonist_initial_pos_y,
           0,
           -1,
+          PROTAGONIST_NEUTRAL_SOUTH_OBJ_BUFFER_POS,
+          0,
+          0,
           protagNeutralSouth};
 
   protagonist = &protag;
@@ -37,8 +40,10 @@ void protagonist_animation()
   {
     vid_vsync();
     key_poll();
-
-    protagonist_move(protagonist);
+    if (protagonist->velocity_x != 0 || protagonist->velocity_y != 0)
+    {
+      protagonist_move(protagonist);
+    }
 
     // move left/right
     protagonist->velocity_x = key_tri_horz();
@@ -48,11 +53,10 @@ void protagonist_animation()
 
     oam_copy(oam_mem, obj_buffer, 128);
 
-    tte_printf("#{es;P}position_x: %d, position_y: %d, velocity_x: %d, velocity_y: %d ",
-               protagonist->position_x,
-               protagonist->position_y,
-               protagonist->velocity_x,
-               protagonist->velocity_y);
+    tte_printf("#{es;P}sprite_facing: %d, animation_frame: %d , sprite_tick: %d",
+               protagonist->sprite_facing,
+               protagonist->animation_frame,
+               protagonist->sprite_tick);
   }
 }
 
@@ -66,7 +70,7 @@ int main()
 
   tte_init_chr4c_b4_default(0, BG_CBB(2) | BG_SBB(28));
   tte_init_con();
-  tte_set_margins(8, 128, 232, 160);
+  tte_set_margins(8, 104, 232, 160);
 
   protagonist_animation();
 

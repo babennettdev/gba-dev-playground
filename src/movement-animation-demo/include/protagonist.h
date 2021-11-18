@@ -30,6 +30,9 @@ typedef struct Protagonist
   int position_y;
   int velocity_x;
   int velocity_y;
+  int sprite_facing;
+  int animation_frame;
+  int sprite_tick;
   OBJ_ATTR *protagonistSpriteCurrent;
 
 } Protagonist;
@@ -43,6 +46,8 @@ void protagonist_init(Protagonist *protagonist);
 void protagonist_update_facing(Protagonist *protagonist);
 
 void protagonist_move(Protagonist *protagonist);
+
+void protagonist_animate_movement(Protagonist *protagonist);
 
 #endif // __PROTAGONIST_H__
 
